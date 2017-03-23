@@ -17,6 +17,8 @@ class PeopleController < ApplicationController
 			render json: {userId: person.id, userName: person.name, userFavoriteCity: person.favoriteCity}
 		else
 			render json: {error: 'sorry, that user cannot be found'}
+
+			# json { render :json => @key.errors, :status => 422 }
 		end
 	end
 
