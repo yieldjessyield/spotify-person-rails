@@ -1,9 +1,10 @@
 class PeopleController < ApplicationController
 
 	def create
+		# byebug
 		person = Person.new(user_params)
 		 if person.save
-		 	render json: {userId: person.id, userName: person.name, userFavoriteCity: person.favoriteCity}
+		 	render json: {id: person.id, name: person.name, favoriteCity: person.favoriteCity}
 		 else
 		 	render json: {error: 'sorry, user cannot be saved'}
 		 end
@@ -13,7 +14,7 @@ class PeopleController < ApplicationController
 		person = Person.find_by_id(self.params["id"].to_i)
 		# byebug
 		if person
-			render json: {userId: person.id, userName: person.name, userFavoriteCity: person.favoriteCity}
+			render json: {id: person.id, name: person.name, favoriteCity: person.favoriteCity}
 		else
 			render json: {error: 'sorry, that user cannot be found'}
 
@@ -28,10 +29,12 @@ class PeopleController < ApplicationController
 	end
 
 	def update
-		person = Person.find_by_id(self.params["id"].to_i)
-		person.favoriteCity = user_params["favoriteCity"]
+		# byebug
+		person = Person.find_by_id(user_params["id"])
+		person.favoriteCity = params["update"]
 		if person.save
-			render json: {userId: person.id, userName: person.name, userFavoriteCity: person.favoriteCity}
+			# byebug
+			render json: {id: person.id, name: person.name, favoriteCity: person.favoriteCity}
 		else
 			render json: {error: 'sorry, that user cannot be updated'}
 		# byebug
