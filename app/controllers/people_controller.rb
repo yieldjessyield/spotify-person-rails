@@ -1,7 +1,6 @@
 class PeopleController < ApplicationController
 
 	def create
-		# byebug
 		person = Person.new(user_params)
 		 if person.save
 		 	render json: {userId: person.id, userName: person.name, userFavoriteCity: person.favoriteCity}
