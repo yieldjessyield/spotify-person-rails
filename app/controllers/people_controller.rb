@@ -1,62 +1,65 @@
 class PeopleController < ApplicationController
-
+	
+	# the Create of CRUD
 	def create
-		# byebug
 		person = Person.new(user_params)
 		 if person.save
-		 	render json: {id: person.id, name: person.name, favoriteCity: person.favoriteCity}
+		 	render json: {id: person.id, name: person.name, favoriteCity: person.favoriteCity}, status: 201
 		 else
-		 	render json: {error: 'sorry, user cannot be saved'}
+		 	render body: 'Person could not be created', status: 404
 		 end
 	end
 
+	# the Read of CRUD
 	def show
 		person = Person.find_by_id(self.params["id"].to_i)
-		# byebug
 		if person
 			render json: {id: person.id, name: person.name, favoriteCity: person.favoriteCity}
 		else
-			render json: {error: 'sorry, that user cannot be found'}
-
-			# json { render :json => @key.errors, :status => 422 }
+			render body: 'Person Not Found', status: 404
 		end
 	end
 
+	# the Read of CRUD
 	def index
 		all_people = Person.all
-		# byebug
-		render json: {people: all_people}
-	end
-
-	def update
-		# byebug
-		person = Person.find_by_id(user_params["id"])
-		person.favoriteCity = params["update"]
-		if person.save
-			# byebug
-			render json: {id: person.id, name: person.name, favoriteCity: person.favoriteCity}
+		if all_people
+			render json: {people: all_people}
 		else
-			render json: {error: 'sorry, that user cannot be updated'}
-		# byebug
+			render body: 'People Not Found', status: 404
 		end
 	end
 
-	def destroy
-		# byebug
-		if Person.find_by_id(self.params["id"].to_i)
-			Person.find(self.params["id"].to_i).destroy
-			render json: { deleteNote: 'success' }
+	# the Update of CRUD
+	def update
+		person = Person.find_by_id(user_params["id"])
+		if person
+			person.favoriteCity = params["update"]
+			if person.save
+				render json: {id: person.id, name: person.name, favoriteCity: person.favoriteCity}
+			else
+				render body: 'Person Invalid', status: 404
+			end
 		else
-			render json: {error: 'sorry, that user does not exist'}
+			render body: 'Person Not Found', status: 404
+		end
+	end
+
+	# the Destroy of CRUD
+	def destroy
+		person = Person.find_by_id(self.params["id"].to_i)
+		if person
+			person.destroy
+			render body: 'Person Destroyed', status: 204
+		else
+			render body: 'Person Not Found', status: 404
 		end
 	end
 
 	private
 
 	def user_params
-    # this is strong params
-    # byebug
-    params.require(:person).permit(:id, :name, :favoriteCity)
+    	params.require(:person).permit(:id, :name, :favoriteCity)
     end
 
 end
