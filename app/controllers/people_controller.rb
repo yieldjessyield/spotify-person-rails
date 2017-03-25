@@ -22,7 +22,7 @@ class PeopleController < ApplicationController
 
 	# the Read of CRUD
 	def index
-		all_people = Person.all
+		all_people = Person.all.sort_by(&:id)
 		if all_people
 			render json: {people: all_people}
 		else
